@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - RH Store</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '869329419369412');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=869329419369412&ev=PageView&noscript=1"
+/></noscript>
+<script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom Scrollbar Styles */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; 
+        }
+
+        /* Support for Urdu Text */
+        .urdu-text {
+            font-family: 'Noto Nastaliq Urdu', serif; 
+            line-height: 1.8; 
+        }
+
+
+        /* Modal Styles */
+        #contact-modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #contact-modal.hidden-modal {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #contact-modal.show-modal {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #e53e3e;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error Styles */
+        .input-error {
+            border-color: #dc2626 !important; 
+            background-color: #fef2f2; 
+        }
+        .error-message {
+            color: #dc2626;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans text-gray-800 flex flex-col pb-20 md:pb-0">
+
+    <header class="font-sans text-gray-800 bg-white sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="p-2 rounded-full hover:bg-gray-100 transition text-gray-600" title="Back to Product">
+                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                    </a>
+
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="text-2xl font-extrabold tracking-tight text-gray-900">
+                            <span class="text-red-600">RH</span> Store
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" onclick="openContactModal()" class="bg-red-600 text-white px-4 py-2 md:px-5 rounded-full font-bold text-sm hover:bg-red-700 transition flex items-center gap-2 shadow-lg">
+                        <i data-lucide="phone" class="w-4 h-4"></i> <span class="hidden md:inline">Contact Us</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="bg-white shadow-sm py-6 mb-8 border-t border-gray-100">
+        <div class="container mx-auto px-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 flex items-center gap-2">
+                <i data-lucide="shield-check" class="text-red-600"></i> Checkout
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">Please fill your details to complete the order.</p>
+            <p class="text-lg text-red-600 font-bold mt-2 urdu-text" dir="rtl" style="text-align: right;">
+                برائے مہربانی آرڈر مکمل کرنے کے لیے اپنی معلومات درج کریں۔
+            </p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 flex-grow">
+        <form id="checkout-form" onsubmit="handleOrder(event)" novalidate class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <div class="lg:col-span-2 space-y-8">
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="user" class="text-red-600 w-5 h-5"></i> Customer Information
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Full Name * <span class="text-gray-700 font-bold text-sm ml-1 urdu-text block md:inline text-right md:text-left">- (اپنا پورا نام لکھیں)</span>
+                            </label>
+                            <input type="text" id="cust-name" placeholder="Enter your name" class="form-input w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-red-600 transition"/>
+                            <div class="error-message">Please enter your name (Apna naam likhein)</div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Mobile Number * <span class="text-gray-700 font-bold text-sm ml-1 urdu-text block md:inline text-right md:text-left">- (موبائل نمبر لکھیں)</span>
+                            </label>
+                            <input type="tel" id="cust-phone" placeholder="0300 1234567" class="form-input w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-red-600 transition"/>
+                            <div class="error-message">Please enter valid mobile number</div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Email Address (Optional) <span class="text-gray-700 font-bold text-sm ml-1 urdu-text block md:inline text-right md:text-left">- (ای میل اگر ہے)</span>
+                            </label>
+                            <input type="email" id="cust-email" placeholder="For order updates" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-red-600 transition"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="map-pin" class="text-red-600 w-5 h-5"></i> Shipping Address
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                City * <span class="text-gray-700 font-bold text-sm ml-1 urdu-text block md:inline text-right md:text-left">- (اپنا شہر لکھیں)</span>
+                            </label>
+                            <input type="text" id="cust-city" placeholder="Enter your city" class="form-input w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-red-600 transition"/>
+                            <div class="error-message">Please enter your city</div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Postal Code (Optional) <span class="text-gray-700 font-bold text-sm ml-1 urdu-text block md:inline text-right md:text-left">- (پوسٹل کوڈ)</span>
+                            </label>
+                            <input type="text" id="cust-zip" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-red-600 transition"/>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Full Address * <span class="text-gray-700 font-bold text-sm ml-1 urdu-text block md:inline text-right md:text-left">- (گھر کا مکمل پتہ لکھیں)</span>
+                            </label>
+                            <textarea id="cust-address" rows="3" placeholder="House #, Street #, Area..." class="form-input w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-red-600 transition"></textarea>
+                            <div class="error-message">Please enter full address</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Order Notes (Optional) <span class="text-gray-700 font-bold text-sm ml-1 urdu-text block md:inline text-right md:text-left">- (کوئی خاص ہدایت)</span>
+                    </label>
+                    <textarea id="cust-notes" rows="2" placeholder="Any special instructions about size, color, or delivery..." class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-red-600 transition"></textarea>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="credit-card" class="text-red-600 w-5 h-5"></i> Payment Method
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <label id="label-cod" class="flex items-start p-4 border rounded-lg cursor-pointer transition border-red-600 bg-red-50">
+                            <input 
+                                type="radio" 
+                                name="payment" 
+                                value="cod"
+                                class="mt-1 w-4 h-4 text-red-600 focus:ring-red-500 accent-red-600"
+                                checked
+                                disabled
+                            />
+                            <div class="ml-3">
+                                <span class="block font-bold text-gray-900">Cash on Delivery (COD)</span>
+                                <span class="block text-sm text-gray-500 mt-1">Pay with cash when you receive your order at your doorstep. Available all over Pakistan.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 sticky top-24">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="shopping-cart" class="text-red-600 w-5 h-5"></i> Order Summary
+                    </h2>
+
+                    <div id="cart-items-container" class="space-y-6 mb-6">
+                        </div>
+
+                    <div class="space-y-2 border-t border-gray-200 pt-4 mb-6">
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Subtotal</span>
+                            <span id="subtotal-display">Rs. 0</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Shipping</span>
+                            <span id="shipping-display" class="text-gray-900 font-medium">Rs. 250</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold text-gray-900 border-t border-dashed border-gray-300 pt-3 mt-2">
+                            <span>Total Amount</span>
+                            <span id="total-display">Rs. 0</span>
+                        </div>
+                    </div>
+
+                    <button 
+                        id="btn-desktop"
+                        type="submit"
+                        class="hidden md:flex w-full py-4 rounded-lg font-bold text-white shadow-lg transition transform hover:-translate-y-1 bg-red-600 hover:bg-red-700 justify-center items-center"
+                    >
+                        <span>Place Order (Cash on Delivery)</span>
+                    </button>
+                    
+                </div>
+            </div>
+
+            <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 md:hidden z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-gray-500">Total Amount:</span>
+                    <span id="total-mobile-display" class="text-xl font-bold text-red-600">Rs. 0</span>
+                </div>
+                <button 
+                    id="btn-mobile"
+                    type="submit"
+                    class="w-full py-3 rounded font-bold text-white shadow-md bg-red-600 active:bg-red-800 flex justify-center items-center"
+                >
+                    <span>Place Order - COD</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <footer class="bg-gray-900 text-gray-300 pt-12 pb-24 md:pb-6 mt-12">
+        <div class="container mx-auto px-4 grid md:grid-cols-2 gap-8 justify-between">
+            <div>
+                <h3 class="text-2xl font-bold text-white mb-4"><span class="text-red-600">RH</span> Store</h3>
+                <p class="text-sm mb-4">Pakistan's #1 Destination for Premium Watches & Mobile Accessories.</p>
+                <div class="flex space-x-4">
+                    <a href="https://www.facebook.com/share/1G7ApLz9rE/?mibextid=wwXIfr" target="_blank" class="hover:text-blue-500 transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                    <a href="https://www.instagram.com/rhstore.pk?igsh=dGM5cHNmMXBrMHpz&utm_source=qr" target="_blank" class="hover:text-pink-500 transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="https://chat.whatsapp.com/E9mDXWIyNC4AW8pip8wjhv" target="_blank" class="hover:text-green-500 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+
+            <div class="md:text-right">
+                <h4 class="text-white font-bold mb-4">Contact Info</h4>
+                <ul class="space-y-2 text-sm md:flex md:flex-col md:items-end">
+                    <li class="flex items-center mb-2"><i data-lucide="map-pin" class="mr-2 text-red-600 w-4 h-4"></i> KPK Mansehra</li>
+                    <li class="flex items-center mb-2"><i data-lucide="phone" class="mr-2 text-red-600 w-4 h-4"></i> 03415812512</li>
+                    <li class="flex items-center"><i data-lucide="clock" class="mr-2 text-red-600 w-4 h-4"></i> Mon - Sat: 11AM - 9PM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-6 text-center text-sm">
+            <p>&copy; 2024 RH Store. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="contact-modal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm hidden-modal p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden relative transform transition-all scale-100">
+            <button onclick="closeContactModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="bg-red-600 p-6 text-center">
+                <div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
+                    <i data-lucide="headset" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3 class="text-white text-xl font-bold">Contact Support</h3>
+                <p class="text-red-100 text-xs mt-1">We are here to help you!</p>
+            </div>
+
+            <div class="p-6 space-y-5">
+                <p class="text-center text-sm text-gray-600 mb-4">
+                    Kisi bhi sawal, order details ya mazeed maloomat ke liye hum se rabta karein.
+                </p>
+
+                <a href="https://wa.me/923415812512" target="_blank" class="flex items-center p-3 bg-green-50 border border-green-100 rounded-lg hover:bg-green-100 transition group">
+                    <div class="bg-green-500 p-2 rounded-full mr-3 text-white group-hover:scale-110 transition-transform">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-medium">WhatsApp</p>
+                        <p class="text-gray-900 font-bold text-sm">0341 5812512</p>
+                    </div>
+                </a>
+
+                <a href="tel:03415812512" class="flex items-center p-3 bg-blue-50 border border-blue-100 rounded-lg hover:bg-blue-100 transition group">
+                    <div class="bg-blue-500 p-2 rounded-full mr-3 text-white group-hover:scale-110 transition-transform">
+                        <i data-lucide="phone" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-medium">Call Us</p>
+                        <p class="text-gray-900 font-bold text-sm">0341 5812512</p>
+                    </div>
+                </a>
+
+                <a href="mailto:rajahabibullah2006@gmail.com" class="flex items-center p-3 bg-gray-50 border border-gray-100 rounded-lg hover:bg-gray-100 transition group">
+                    <div class="bg-gray-700 p-2 rounded-full mr-3 text-white group-hover:scale-110 transition-transform">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="text-xs text-gray-500 font-medium">Email</p>
+                        <p class="text-gray-900 font-bold text-xs truncate">rajahabibullah2006@gmail.com</p>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="bg-gray-50 p-4 text-center">
+                <button onclick="closeContactModal()" class="text-gray-500 hover:text-gray-800 text-sm font-medium">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKQ8L-2jA9z6MLgtaueKw5A3QuaQyvH7iWNRuUrJ-s1Myg26MKpZUnS2DsjV5Wbt6buQ/exec";
+
+        let CART_ITEMS = [];
+
+        let state = {
+            subtotal: 0,
+            shipping: 250, 
+            total: 0
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedData = localStorage.getItem('rh_checkout_data');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                CART_ITEMS = [{
+                    id: data.id,
+                    name: data.title,
+                    variant: data.color + (data.strap ? " / " + data.strap : ""),
+                    price: data.price,
+                    qty: data.quantity,
+                    image: data.image
+                }];
+            }
+
+            calculateTotals();
+            renderCart();
+            lucide.createIcons();
+            
+            // Remove error styles on input
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.addEventListener('input', () => {
+                    input.classList.remove('input-error');
+                    const errorMsg = input.nextElementSibling;
+                    if(errorMsg && errorMsg.classList.contains('error-message')) {
+                        errorMsg.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Function to calculate final totals
+        function calculateTotals() {
+            const totalQty = CART_ITEMS.reduce((acc, item) => acc + item.qty, 0);
+
+            if (totalQty > 0) {
+                state.shipping = 250 + ((totalQty - 1) * 50);
+            } else {
+                state.shipping = 0;
+            }
+
+            state.subtotal = CART_ITEMS.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            state.total = state.subtotal + state.shipping;
+            
+            document.getElementById('subtotal-display').textContent = `Rs. ${state.subtotal.toLocaleString()}`;
+            document.getElementById('shipping-display').textContent = `Rs. ${state.shipping}`;
+            document.getElementById('total-display').textContent = `Rs. ${state.total.toLocaleString()}`;
+            document.getElementById('total-mobile-display').textContent = `Rs. ${state.total.toLocaleString()}`;
+        }
+
+        // Render Cart items in Summary
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = CART_ITEMS.map(item => `
+                <div class="flex gap-4 items-start border-b border-gray-200 pb-4 last:border-0 last:pb-0 mb-4">
+                    <div class="flex-shrink-0">
+                        <img src="${item.image}" alt="${item.name}" class="w-28 h-28 object-cover rounded-lg border border-gray-200 shadow-sm"/>
+                    </div>
+                    <div class="flex-1 flex flex-col">
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">${item.name}</h4>
+                        <div class="space-y-1 text-sm text-gray-700">
+                            <p class="flex items-center"><span class="font-bold w-16 text-gray-600">Color:</span> <span class="font-semibold text-gray-900">${item.variant}</span></p>
+                            <p class="flex items-center"><span class="font-bold w-16 text-gray-600">Quantity:</span> <span class="bg-gray-100 px-3 py-0.5 rounded text-gray-900 font-bold border border-gray-200">${item.qty}</span></p>
+                        </div>
+                        <div class="mt-3 flex justify-between items-end">
+                            <div class="text-xs text-gray-500">${item.qty > 1 ? `(1 Unit Price: Rs. ${item.price.toLocaleString()})` : ''}</div>
+                            <span class="text-xl font-bold text-red-600">Rs. ${(item.price * item.qty).toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openContactModal() { document.getElementById('contact-modal').classList.add('show-modal'); }
+        function closeContactModal() { document.getElementById('contact-modal').classList.remove('show-modal'); }
+
+        // Handle Order Submission
+        function handleOrder(e) {
+            e.preventDefault();
+
+            let isValid = true;
+            const requiredIds = ['cust-name', 'cust-phone', 'cust-city', 'cust-address'];
+            
+            // Validation Logic
+            requiredIds.forEach(id => {
+                const element = document.getElementById(id);
+                const errorMsg = element.nextElementSibling;
+                if (!element.value.trim()) {
+                    element.classList.add('input-error');
+                    if (errorMsg && errorMsg.classList.contains('error-message')) {
+                        errorMsg.style.display = 'block';
+                    }
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                const firstError = document.querySelector('.input-error');
+                if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            const btnDesktop = document.getElementById('btn-desktop');
+            const btnMobile = document.getElementById('btn-mobile');
+            const originalDesktopText = btnDesktop.innerHTML;
+            const originalMobileText = btnMobile.innerHTML;
+
+            // Show Loading
+            const loaderHtml = '<div class="loader"></div>';
+            btnDesktop.innerHTML = loaderHtml;
+            btnMobile.innerHTML = loaderHtml;
+            btnDesktop.disabled = true;
+            btnMobile.disabled = true;
+
+            const orderId = "RH-" + Math.floor(Math.random() * 100000);
+            
+            // Prepare Order Details for LocalStorage
+            const orderDetails = {
+                orderId: orderId,
+                date: new Date().toLocaleDateString('en-GB'),
+                customer: {
+                    name: document.getElementById('cust-name').value,
+                    phone: document.getElementById('cust-phone').value,
+                    email: document.getElementById('cust-email').value || "N/A",
+                    city: document.getElementById('cust-city').value,
+                    address: document.getElementById('cust-address').value
+                },
+                items: CART_ITEMS,
+                shipping: state.shipping,
+                total: state.total
+            };
+            localStorage.setItem('rh_last_order', JSON.stringify(orderDetails));
+
+            // Prepare Form Data for Google Sheets
+            const formData = {
+                orderId: orderId, 
+                name: document.getElementById('cust-name').value,
+                phone: document.getElementById('cust-phone').value,
+                email: document.getElementById('cust-email').value || "N/A",
+                city: document.getElementById('cust-city').value,
+                address: document.getElementById('cust-address').value + " (ZIP: " + document.getElementById('cust-zip').value + ")",
+                items: CART_ITEMS.map(i => `${i.name} [${i.variant}] x${i.qty}`).join(", "),
+                total: `Rs. ${state.total}`,
+                notes: document.getElementById('cust-notes').value || ""
+            };
+
+            // Post to Google Script
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(() => {
+                localStorage.removeItem('rh_checkout_data'); 
+                window.location.href = 'OrderConfirmation.html'; 
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                btnDesktop.innerHTML = originalDesktopText;
+                btnMobile.innerHTML = originalMobileText;
+                btnDesktop.disabled = false;
+                btnMobile.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>

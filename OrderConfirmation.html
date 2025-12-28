@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - RH Store</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '869329419369412');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=869329419369412&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+ <script>
+  fbq('track', 'Purchase', {
+    value: 3300.00,
+    currency: 'PKR'
+  });
+</script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        .urdu-text { font-family: 'Noto Nastaliq Urdu', serif; line-height: 1.8; }
+        @keyframes bounce-slow { 0%, 100% { transform: translateY(-5%); } 50% { transform: translateY(5%); } }
+        .animate-bounce-slow { animation: bounce-slow 2s infinite; }
+        
+        /* Modal Styles - Fixed */
+        #contact-modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #contact-modal.hidden-modal {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #contact-modal.show-modal {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans text-gray-800 flex flex-col">
+
+    <!-- NAVBAR -->
+    <header class="font-sans text-gray-800 bg-white sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <!-- BACK BUTTON (Ab yeh sidha index.html par jayega) -->
+                    <a href="javascript:void(0)" onclick="navigateTo('index.html')" class="p-2 rounded-full hover:bg-gray-100 transition text-gray-600" title="Back to Home">
+                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                    </a>
+                    
+                    <!-- LOGO -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="text-2xl font-extrabold tracking-tight text-gray-900">
+                            <span class="text-red-600">RH</span> Store
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <!-- Contact Us Button -->
+                    <button type="button" onclick="openContactModal()" class="bg-red-600 text-white px-4 py-2 md:px-5 rounded-full font-bold text-sm hover:bg-red-700 transition flex items-center gap-2 shadow-lg">
+                        <i data-lucide="phone" class="w-4 h-4"></i> <span class="hidden md:inline">Contact Us</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- SUCCESS BANNER -->
+    <div class="bg-green-600 text-white py-12 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, #ffffff 2px, transparent 2.5px); background-size: 20px 20px;"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-white mb-6 shadow-xl animate-bounce-slow">
+                <i data-lucide="check-circle" class="h-12 w-12 text-green-600"></i>
+            </div>
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-2 tracking-tight">Order Confirmed!</h1>
+            <p class="text-lg text-green-100 font-medium">Thank You for Your Purchase</p>
+            <p class="text-sm text-green-200 mt-2 max-w-md mx-auto leading-relaxed urdu-text" dir="rtl">
+                آپ کا آرڈر کامیابی سے درج کر لیا گیا ہے۔ ہم جلد ہی آپ سے رابطہ کریں گے۔
+            </p>
+        </div>
+    </div>
+
+    <!-- ORDER DETAILS -->
+    <div class="container mx-auto px-4 -mt-10 relative z-20 mb-12 flex-grow">
+        <div class="max-w-4xl mx-auto space-y-6">
+            
+            <div class="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+                   <div class="mb-2 md:mb-0">
+                      <p class="text-xs text-gray-500 uppercase tracking-wide font-bold">Order Number</p>
+                      <p id="order-id-display" class="text-lg font-bold text-gray-900 tracking-wider">#RH-...</p>
+                   </div>
+                   <div class="flex items-center space-x-2 text-sm font-medium text-gray-600 bg-white px-3 py-1 rounded border border-gray-200">
+                      <i data-lucide="calendar" class="w-4 h-4"></i> <span id="order-date-display">--</span>
+                   </div>
+                </div>
+
+                <div class="p-6 md:p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4 border-b pb-2 flex items-center">
+                                <i data-lucide="user" class="mr-2 text-red-600 w-4 h-4"></i> Customer Information
+                            </h3>
+                            <div class="space-y-3 text-sm">
+                                <p id="cust-name" class="font-bold text-gray-800 text-lg">--</p>
+                                <p class="flex items-center text-gray-600"><i data-lucide="phone" class="mr-2 text-gray-400 w-4 h-4"></i> <span id="cust-phone">--</span></p>
+                                <p class="flex items-center text-gray-600"><i data-lucide="mail" class="mr-2 text-gray-400 w-4 h-4"></i> <span id="cust-email">--</span></p>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4 border-b pb-2 mt-8 flex items-center">
+                                <i data-lucide="credit-card" class="mr-2 text-red-600 w-4 h-4"></i> Payment & Delivery
+                            </h3>
+                            <div class="space-y-3 text-sm">
+                                <p class="text-gray-600 flex justify-between"><span class="font-semibold text-gray-800">Payment:</span> <span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded text-xs font-bold">Cash on Delivery</span></p>
+                                <p class="text-gray-600 flex justify-between"><span class="font-semibold text-gray-800">Method:</span> <span class="text-green-600 font-bold">Standard Delivery</span></p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4 border-b pb-2 flex items-center">
+                                <i data-lucide="truck" class="mr-2 text-red-600 w-4 h-4"></i> Shipping Address
+                            </h3>
+                            <div class="flex items-start bg-gray-50 p-4 rounded-lg border border-gray-100 h-24">
+                                <i data-lucide="map-pin" class="text-red-600 mr-3 mt-1 flex-shrink-0 w-5 h-5"></i>
+                                <div>
+                                    <p id="cust-address" class="text-gray-800 font-medium leading-relaxed">--</p>
+                                    <p id="cust-city" class="text-gray-500 text-sm mt-1 font-bold">--</p>
+                                </div>
+                            </div>
+                            <div class="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                <h4 class="text-blue-800 font-bold text-sm mb-2 flex items-center"><i data-lucide="info" class="w-4 h-4 mr-2"></i> What Happens Next?</h4>
+                                <ul class="text-xs text-blue-700 space-y-1.5 list-disc list-inside">
+                                    <li>Order confirm karne ke liye hum call/WhatsApp karenge.</li>
+                                    <li>Order 24-48 ghanton mein dispatch hoga.</li>
+                                    <li>Delivery time: <strong>3-5 working days</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-900 flex items-center"><i data-lucide="shopping-bag" class="mr-2 text-red-600 w-5 h-5"></i> Ordered Items</h3>
+                </div>
+                <div id="order-items-container" class="divide-y divide-gray-100"></div>
+                <div class="bg-gray-50 px-6 py-6 border-t border-gray-100">
+                    <div class="flex justify-between text-sm mb-2 text-gray-600"><span>Subtotal</span><span id="subtotal-display">Rs. 0</span></div>
+                    <div class="flex justify-between text-sm mb-4 text-gray-600"><span>Shipping</span><span id="shipping-display" class="text-gray-900 font-medium">Rs. 0</span></div>
+                    <div class="flex justify-between text-lg font-extrabold text-gray-900 border-t border-gray-200 pt-4"><span>Total Amount</span><span id="total-display" class="text-red-600">Rs. 0</span></div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+                <!-- TRACK ORDER BUTTON -->
+                <button onclick="trackOrder()" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-gray-900 hover:bg-gray-800 shadow-lg transition transform hover:-translate-y-1 cursor-pointer">
+                    <i data-lucide="package" class="mr-2 w-5 h-5"></i> Track My Order
+                </button>
+                <!-- JOIN GROUP BUTTON -->
+                <button onclick="joinGroup()" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-green-600 hover:bg-green-700 shadow-lg transition transform hover:-translate-y-1 cursor-pointer">
+                    <i data-lucide="users" class="mr-2 w-5 h-5"></i> Join WhatsApp Group
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 pt-12 pb-6">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-2xl font-bold text-white mb-2"><span class="text-red-600">RH</span> Store</h3>
+            <p class="text-sm mb-6">Pakistan's #1 Destination for Premium Watches.</p>
+            <p class="text-xs text-gray-500">&copy; 2024 RH Store. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm hidden-modal p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden relative transform transition-all scale-100">
+            <!-- Close Button -->
+            <button onclick="closeContactModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <!-- Header -->
+            <div class="bg-red-600 p-6 text-center">
+                <div class="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
+                    <i data-lucide="headset" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3 class="text-white text-xl font-bold">Contact Support</h3>
+                <p class="text-red-100 text-xs mt-1">We are here to help you!</p>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 space-y-5">
+                <p class="text-center text-sm text-gray-600 mb-4">
+                    Kisi bhi sawal, order details ya mazeed maloomat ke liye hum se rabta karein.
+                </p>
+
+                <!-- WhatsApp -->
+                <a href="https://wa.me/923415812512" target="_blank" class="flex items-center p-3 bg-green-50 border border-green-100 rounded-lg hover:bg-green-100 transition group">
+                    <div class="bg-green-500 p-2 rounded-full mr-3 text-white group-hover:scale-110 transition-transform">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-medium">WhatsApp</p>
+                        <p class="text-gray-900 font-bold text-sm">0341 5812512</p>
+                    </div>
+                </a>
+
+                <!-- Phone -->
+                <a href="tel:03415812512" class="flex items-center p-3 bg-blue-50 border border-blue-100 rounded-lg hover:bg-blue-100 transition group">
+                    <div class="bg-blue-500 p-2 rounded-full mr-3 text-white group-hover:scale-110 transition-transform">
+                        <i data-lucide="phone" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-medium">Call Us</p>
+                        <p class="text-gray-900 font-bold text-sm">0341 5812512</p>
+                    </div>
+                </a>
+
+                <!-- Email -->
+                <a href="mailto:rajahabibullah2006@gmail.com" class="flex items-center p-3 bg-gray-50 border border-gray-100 rounded-lg hover:bg-gray-100 transition group">
+                    <div class="bg-gray-700 p-2 rounded-full mr-3 text-white group-hover:scale-110 transition-transform">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="text-xs text-gray-500 font-medium">Email</p>
+                        <p class="text-gray-900 font-bold text-xs truncate">rajahabibullah2006@gmail.com</p>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Footer -->
+            <div class="bg-gray-50 p-4 text-center">
+                <button onclick="closeContactModal()" class="text-gray-500 hover:text-gray-800 text-sm font-medium">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script>
+        let ORDER_DATA = null;
+
+        function navigateTo(url) {
+            try {
+                window.location.href = url;
+            } catch (e) {
+                console.error("Navigation failed:", e);
+                alert("Redirecting to " + url);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedData = localStorage.getItem('rh_last_order');
+            if (savedData) {
+                ORDER_DATA = JSON.parse(savedData);
+                
+                document.getElementById('order-id-display').textContent = `#${ORDER_DATA.orderId}`;
+                document.getElementById('order-date-display').textContent = ORDER_DATA.date;
+                document.getElementById('cust-name').textContent = ORDER_DATA.customer.name;
+                document.getElementById('cust-phone').textContent = ORDER_DATA.customer.phone;
+                document.getElementById('cust-email').textContent = ORDER_DATA.customer.email;
+                document.getElementById('cust-city').textContent = ORDER_DATA.customer.city;
+                document.getElementById('cust-address').textContent = ORDER_DATA.customer.address;
+
+                const container = document.getElementById('order-items-container');
+                container.innerHTML = ORDER_DATA.items.map(item => `
+                    <div class="p-6 flex flex-col sm:flex-row items-center sm:justify-between">
+                        <div class="flex items-center w-full sm:w-auto mb-4 sm:mb-0">
+                            <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 shadow-sm relative">
+                                <img src="${item.image}" alt="${item.name}" class="h-full w-full object-cover object-center" />
+                                <span class="absolute bottom-0 right-0 bg-gray-900 text-white text-[10px] px-1.5 py-0.5 rounded-tl-md font-bold">${item.qty}</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-sm font-bold text-gray-900">${item.name}</h4>
+                                <p class="mt-1 text-xs text-gray-500 font-medium bg-gray-100 inline-block px-2 py-0.5 rounded">${item.variant}</p>
+                            </div>
+                        </div>
+                        <div class="text-right w-full sm:w-auto">
+                            <p class="text-sm font-bold text-gray-900">Rs. ${(item.price * item.qty).toLocaleString()}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                const subtotal = ORDER_DATA.items.reduce((acc, item) => acc + (item.price * item.qty), 0);
+                document.getElementById('subtotal-display').textContent = `Rs. ${subtotal.toLocaleString()}`;
+                document.getElementById('shipping-display').textContent = `Rs. ${ORDER_DATA.shipping.toLocaleString()}`;
+                document.getElementById('total-display').textContent = `Rs. ${ORDER_DATA.total.toLocaleString()}`;
+            } else {
+                // Fallback to home if no data
+                // navigateTo('index.html');
+            }
+            lucide.createIcons();
+        });
+
+        function trackOrder() {
+            if (!ORDER_DATA) return;
+            const message = `Salam RH Store, maine abhi order place kiya hai. Please mera parcel track karein. Order ID: #${ORDER_DATA.orderId}`;
+            const url = `https://wa.me/923415812512?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function joinGroup() {
+            window.open("https://chat.whatsapp.com/E9mDXWIyNC4AW8pip8wjhv", '_blank');
+        }
+
+        function openContactModal() { 
+            const modal = document.getElementById('contact-modal');
+            modal.classList.remove('hidden-modal');
+            modal.classList.add('show-modal');
+        }
+        
+        function closeContactModal() { 
+            const modal = document.getElementById('contact-modal');
+            modal.classList.remove('show-modal');
+            modal.classList.add('hidden-modal');
+        }
+        
+        window.onclick = function(e) { 
+            const modal = document.getElementById('contact-modal');
+            if (e.target == modal) { 
+                closeContactModal(); 
+            } 
+        }
+    </script>
+</body>
+</html>
